@@ -13,21 +13,21 @@
 docker-compose up -d
 ```
 
-### 2. Configure RDTClient (Real-Debrid) - http://localhost:6500
+### 2. Configure RDTClient (Real-Debrid) - http://raspi.local:6500
 - Login with default credentials (check first run logs if needed)
 - Settings → Provider: Select "RealDebrid"
 - Enter your Real-Debrid API key
 - Download Path: `/data/downloads`
 - Save settings
 
-### 3. Configure RDTClient (TorBox) - http://localhost:6501
+### 3. Configure RDTClient (TorBox) - http://raspi.local:6501
 - Login with default credentials
 - Settings → Provider: Select "TorBox"
 - Enter your TorBox API key
 - Download Path: `/data/downloads`
 - Save settings
 
-### 4. Configure Prowlarr - http://localhost:9696
+### 4. Configure Prowlarr - http://raspi.local:9696
 - Complete initial setup wizard
 - Settings → Indexers → Add Indexer
   - **Free indexers**: 1337x, EZTV, Kickass Torrents, LimeTorrents, Nyaa, TorrentGalaxy, YTS, ThePirateBay
@@ -42,7 +42,7 @@ docker-compose up -d
   - Add Radarr: `http://radarr:7878` (API key from Radarr Settings → General)
   - Prowlarr will auto-sync indexers to both apps
 
-### 5. Configure Sonarr - http://localhost:8989
+### 5. Configure Sonarr - http://raspi.local:8989
 - Settings → Media Management
   - Root Folder: Add `/tv`
   - Enable "Rename Episodes"
@@ -64,7 +64,7 @@ docker-compose up -d
 - Settings → Download Clients → Remote Path Mappings
   - Not needed (all containers use `/downloads`)
 
-### 6. Configure Radarr - http://localhost:7878
+### 6. Configure Radarr - http://raspi.local:7878
 - Settings → Media Management
   - Root Folder: Add `/movies`
   - Enable "Rename Movies"
@@ -86,7 +86,7 @@ docker-compose up -d
 - Settings → Download Clients → Remote Path Mappings
   - Not needed (all containers use `/downloads`)
 
-### 7. Configure Bazarr - http://localhost:6767
+### 7. Configure Bazarr - http://raspi.local:6767
 - Settings → Sonarr
   - Enable: Yes
   - Address: `sonarr`, Port: `8989`
@@ -97,13 +97,13 @@ docker-compose up -d
   - API Key: (from Radarr)
 - Languages → Add your preferred subtitle languages
 
-### 8. Configure Jellyfin - http://localhost:8096
+### 8. Configure Jellyfin - http://raspi.local:8096
 - Complete initial setup wizard
 - Add Media Libraries:
   - Shows: `/data/tvshows`
   - Movies: `/data/movies`
 
-### 9. Configure Homarr - http://localhost:5000
+### 9. Configure Homarr - http://raspi.local:5000
 - Add widgets for all services using the URLs and API keys configured above
 
 ## Download Workflow
@@ -124,18 +124,18 @@ docker-compose up -d
 **Note**: Steps 5-7 happen automatically via Completed Download Handling. No manual file moving required.
 
 ## Service URLs
-- Sonarr: http://localhost:8989
-- Radarr: http://localhost:7878
-- Prowlarr: http://localhost:9696
-- Bazarr: http://localhost:6767
-- Jellyfin: http://localhost:8096
-- RDTClient (Real-Debrid): http://localhost:6500
-- RDTClient (TorBox): http://localhost:6501
-- qBittorrent: http://localhost:8080
-- Homarr: http://localhost:5000
+- Sonarr: http://raspi.local:8989
+- Radarr: http://raspi.local:7878
+- Prowlarr: http://raspi.local:9696
+- Bazarr: http://raspi.local:6767
+- Jellyfin: http://raspi.local:8096
+- RDTClient (Real-Debrid): http://raspi.local:6500
+- RDTClient (TorBox): http://raspi.local:6501
+- qBittorrent: http://raspi.local:8080
+- Homarr: http://raspi.local:5000
 
 ## Notes
 - RDTClient mimics qBittorrent API, so configure it as qBittorrent in Sonarr/Radarr
-- Warp SOCKS proxy available at localhost:1080 if needed for indexers
+- Warp SOCKS proxy available at raspi.local:1080 if needed for indexers
 - Update PUID/PGID in docker-compose.yaml if not 1000
 - Update timezone from Europe/Madrid if needed
