@@ -18,6 +18,7 @@ docker-compose up -d
 - Settings → Provider: Select "RealDebrid"
 - Enter your Real-Debrid API key
 - Download Path: `/data/downloads`
+- Mapped Path: Leave empty
 - Save settings
 
 ### 3. Configure RDTClient (TorBox) - http://raspi.local:6501
@@ -25,24 +26,37 @@ docker-compose up -d
 - Settings → Provider: Select "TorBox"
 - Enter your TorBox API key
 - Download Path: `/data/downloads`
+- Mapped Path: Leave empty
 - Save settings
 
-### 4. Configure Prowlarr - http://raspi.local:9696
+### 4. Initial Setup Sonarr and Radarr (Get API Keys)
+
+#### Sonarr - http://raspi.local:8989
 - Complete initial setup wizard
+- Settings → General → Security → Copy the **API Key** (you'll need this for Prowlarr)
+
+#### Radarr - http://raspi.local:7878
+- Complete initial setup wizard
+- Settings → General → Security → Copy the **API Key** (you'll need this for Prowlarr)
+
+### 5. Configure Prowlarr - http://raspi.local:9696
+- Complete initial setup wizard
+- **Configure FlareSolverr proxy first** (for Cloudflare-protected indexers):
+  - Settings → Indexers → Add Proxy
+  - Name: `flaresolverr`
+  - Tags: Type `flaresolverr` and press Enter (creates tag automatically)
+  - Host: `http://flaresolverr:8191`
+  - Test and Save
 - Settings → Indexers → Add Indexer
   - **Free indexers**: 1337x, EZTV, Kickass Torrents, LimeTorrents, Nyaa, TorrentGalaxy, YTS, ThePirateBay
-  - For Cloudflare-protected indexers:
-    - Create tag "flaresolverr" in Settings → Tags
-    - Add tag to indexer when configuring
-    - Settings → Indexers → FlareSolverr Tags: Select "flaresolverr"
-    - FlareSolverr URL: `http://flaresolverr:8191`
+  - For Cloudflare-protected indexers (like 1337x): Add the `flaresolverr` tag when configuring
   - Test each indexer after adding
 - Settings → Apps → Add Application
-  - Add Sonarr: `http://sonarr:8989` (API key from Sonarr Settings → General)
-  - Add Radarr: `http://radarr:7878` (API key from Radarr Settings → General)
+  - Add Sonarr: `http://sonarr:8989` (use API key from step 4)
+  - Add Radarr: `http://radarr:7878` (use API key from step 4)
   - Prowlarr will auto-sync indexers to both apps
 
-### 5. Configure Sonarr - http://raspi.local:8989
+### 6. Configure Sonarr Download Clients - http://raspi.local:8989
 - Settings → Media Management
   - Root Folder: Add `/tv`
   - Enable "Rename Episodes"
@@ -64,7 +78,7 @@ docker-compose up -d
 - Settings → Download Clients → Remote Path Mappings
   - Not needed (all containers use `/downloads`)
 
-### 6. Configure Radarr - http://raspi.local:7878
+### 7. Configure Radarr Download Clients - http://raspi.local:7878
 - Settings → Media Management
   - Root Folder: Add `/movies`
   - Enable "Rename Movies"
@@ -86,7 +100,7 @@ docker-compose up -d
 - Settings → Download Clients → Remote Path Mappings
   - Not needed (all containers use `/downloads`)
 
-### 7. Configure Bazarr - http://raspi.local:6767
+### 8. Configure Bazarr - http://raspi.local:6767
 - Settings → Sonarr
   - Enable: Yes
   - Address: `sonarr`, Port: `8989`
@@ -97,13 +111,13 @@ docker-compose up -d
   - API Key: (from Radarr)
 - Languages → Add your preferred subtitle languages
 
-### 8. Configure Jellyfin - http://raspi.local:8096
+### 9. Configure Jellyfin - http://raspi.local:8096
 - Complete initial setup wizard
 - Add Media Libraries:
   - Shows: `/data/tvshows`
   - Movies: `/data/movies`
 
-### 9. Configure Homarr - http://raspi.local:5000
+### 10. Configure Homarr - http://raspi.local:5000
 - Add widgets for all services using the URLs and API keys configured above
 
 ## Download Workflow
