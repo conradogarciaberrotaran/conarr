@@ -58,11 +58,26 @@ docker-compose up -d
   - For Cloudflare-protected indexers (like 1337x): Add the `flaresolverr` tag when configuring
   - Test each indexer after adding
 - Settings → Apps → Add Application
-  - Add Sonarr: `http://sonarr:8989` (use API key from step 4)
-  - Add Radarr: `http://radarr:7878` (use API key from step 4)
-  - Prowlarr will auto-sync indexers to both apps
+  - **Add Sonarr**:
+    - Prowlarr Server: `http://prowlarr:9696`
+    - Radarr Server: `http://sonarr:8989`
+    - API Key: (use API key from step 4)
+    - Sync Level: **Full Sync**
+    - Test and Save
+  - **Add Radarr**:
+    - Prowlarr Server: `http://prowlarr:9696`
+    - Radarr Server: `http://radarr:7878`
+    - API Key: (use API key from step 4)
+    - Sync Level: **Full Sync**
+    - Test and Save
+  - Click **Sync App Indexers** button to sync all indexers to both apps
+  - Prowlarr will auto-sync indexers (with RSS enabled) to both apps
 
 ### 6. Configure Sonarr Download Clients - http://raspi.local:8989
+- **Verify Indexers**: Settings → Indexers
+  - Check that indexers from Prowlarr are listed
+  - Verify **Enable RSS** and **Enable Automatic Search** are checked
+  - If not synced, go back to Prowlarr and click **Sync App Indexers**
 - Settings → Media Management
   - Root Folder: Add `/tv`
   - Enable "Rename Episodes"
@@ -88,6 +103,10 @@ docker-compose up -d
     - Priority: `2`
 
 ### 7. Configure Radarr Download Clients - http://raspi.local:7878
+- **Verify Indexers**: Settings → Indexers
+  - Check that indexers from Prowlarr are listed
+  - Verify **Enable RSS** and **Enable Automatic Search** are checked
+  - If not synced, go back to Prowlarr and click **Sync App Indexers**
 - Settings → Media Management
   - Root Folder: Add `/movies`
   - Enable "Rename Movies"
