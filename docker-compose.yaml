@@ -1,0 +1,256 @@
+services:
+  warp:
+    image: monius/docker-warp-socks:latest
+    container_name: warp
+    restart: unless-stopped
+    ports:
+      - "1080:9091"
+    environment:
+      - TZ=Europe/Madrid
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv4.conf.all.src_valid_mark=1
+    volumes:
+      - ./warp-data:/root/.warp
+    networks:
+      - media_net
+
+  rdtclient-realdebrid:
+    image: rogerfar/rdtclient:latest
+    container_name: rdtclient-rd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./rdtclient-rd/data:/data/db
+      - ~/media/downloads:/data/downloads
+    ports:
+      - "6500:6500"
+    networks:
+      - media_net
+    restart: unless-stopped
+    labels:
+      - homepage.group=Download Clients
+      - homepage.name=Real-Debrid
+      - homepage.icon=real-debrid.png
+      - homepage.href=http://raspi.local:6500
+      - homepage.description=Real-Debrid Client
+
+  rdtclient-torbox:
+    image: rogerfar/rdtclient:latest
+    container_name: rdtclient-torbox
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./rdtclient-torbox/data:/data/db
+      - ~/media/downloads:/data/downloads
+    ports:
+      - "6501:6500"
+    networks:
+      - media_net
+    restart: unless-stopped
+    labels:
+      - homepage.group=Download Clients
+      - homepage.name=TorBox
+      - homepage.icon=torbox.png
+      - homepage.href=http://raspi.local:6501
+      - homepage.description=TorBox Client
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=info
+      - TZ=Europe/Madrid
+      - CAPTCHA_SOLVER=none
+    ports:
+      - "8191:8191"
+    networks:
+      - media_net
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./sonarr:/config
+      - ~/media/shows:/tv
+      - ~/media/downloads:/downloads
+    ports:
+      - "8989:8989"
+    networks:
+      - media_net
+    depends_on:
+      - warp
+      - rdtclient-realdebrid
+      - rdtclient-torbox
+    restart: unless-stopped
+    labels:
+      - homepage.group=Media Management
+      - homepage.name=Sonarr
+      - homepage.icon=sonarr.png
+      - homepage.href=http://raspi.local:8989
+      - homepage.description=TV Shows
+      - homepage.widget.type=sonarr
+      - homepage.widget.url=http://sonarr:8989
+      - homepage.widget.key=YOUR_SONARR_API_KEY
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./radarr:/config
+      - ~/media/movies:/movies
+      - ~/media/downloads:/downloads
+    ports:
+      - "7878:7878"
+    networks:
+      - media_net
+    depends_on:
+      - warp
+      - rdtclient-realdebrid
+      - rdtclient-torbox
+    restart: unless-stopped
+    labels:
+      - homepage.group=Media Management
+      - homepage.name=Radarr
+      - homepage.icon=radarr.png
+      - homepage.href=http://raspi.local:7878
+      - homepage.description=Movies
+      - homepage.widget.type=radarr
+      - homepage.widget.url=http://radarr:7878
+      - homepage.widget.key=YOUR_RADARR_API_KEY
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./prowlarr:/config
+    ports:
+      - "9696:9696"
+    networks:
+      - media_net
+    depends_on:
+      - warp
+      - flaresolverr
+    restart: unless-stopped
+    labels:
+      - homepage.group=Media Management
+      - homepage.name=Prowlarr
+      - homepage.icon=prowlarr.png
+      - homepage.href=http://raspi.local:9696
+      - homepage.description=Indexer Manager
+      - homepage.widget.type=prowlarr
+      - homepage.widget.url=http://prowlarr:9696
+      - homepage.widget.key=YOUR_PROWLARR_API_KEY
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - WEBUI_PORT=8080
+    volumes:
+      - ./qbittorrent:/config
+      - ~/media/downloads:/downloads
+    ports:
+      - "8080:8080"
+    networks:
+      - media_net
+    depends_on:
+      - warp
+    restart: unless-stopped
+    labels:
+      - homepage.group=Download Clients
+      - homepage.name=qBittorrent
+      - homepage.icon=qbittorrent.png
+      - homepage.href=http://raspi.local:8080
+      - homepage.description=Torrent Client
+      - homepage.widget.type=qbittorrent
+      - homepage.widget.url=http://qbittorrent:8080
+      - homepage.widget.username=admin
+      - homepage.widget.password=YOUR_QBIT_PASSWORD
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./bazarr:/config
+      - ~/media/shows:/tv
+      - ~/media/movies:/movies
+    ports:
+      - "6767:6767"
+    networks:
+      - media_net
+    restart: unless-stopped
+    labels:
+      - homepage.group=Media Management
+      - homepage.name=Bazarr
+      - homepage.icon=bazarr.png
+      - homepage.href=http://raspi.local:6767
+      - homepage.description=Subtitles
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./jellyfin:/config
+      - ~/media/shows:/data/tvshows
+      - ~/media/movies:/data/movies
+    ports:
+      - "8096:8096"
+    networks:
+      - media_net
+    restart: unless-stopped
+    labels:
+      - homepage.group=Media Servers
+      - homepage.name=Jellyfin
+      - homepage.icon=jellyfin.png
+      - homepage.href=http://raspi.local:8096
+      - homepage.description=Media Server
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    container_name: homarr
+    restart: unless-stopped
+    ports:
+      - "5000:7575"
+    volumes:
+      - ./homarr/configs:/app/data/configs
+      - ./homarr/icons:/app/public/icons
+      - ./homarr/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - TZ=Europe/Madrid
+    networks:
+      - media_net
+
+networks:
+  media_net:
+    driver: bridge
