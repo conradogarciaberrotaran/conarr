@@ -132,15 +132,35 @@ docker-compose up -d
     - Priority: `2`
 
 ### 8. Configure Bazarr - http://raspi.local:6767
-- Settings → Sonarr
+- **Settings → Providers**:
+  - Add subtitle providers (click the + button for each):
+    - SubDivx (for Spanish)
+    - Subtitulamos.tv (for Spanish)
+    - OpenSubtitles.com (requires free account)
+    - Subscene
+    - Add any other providers you want
+  - Configure each provider with credentials if needed
+  - Save
+- **Settings → Languages**:
+  - Click + to add languages you want subtitles for (e.g., English, Spanish, etc.)
+  - Save
+- **Settings → Languages → Language Profiles**:
+  - Click + to create a new profile
+  - Name: `Default` (or your preferred name)
+  - Add languages in priority order (drag to reorder)
+  - Save
+- **Settings → Sonarr**:
   - Enable: Yes
   - Address: `sonarr`, Port: `8989`
   - API Key: (from Sonarr)
-- Settings → Radarr
+  - Default Language Profile: Select the profile you created above
+  - Save and Test
+- **Settings → Radarr**:
   - Enable: Yes
   - Address: `radarr`, Port: `7878`
   - API Key: (from Radarr)
-- Languages → Add your preferred subtitle languages
+  - Default Language Profile: Select the profile you created above
+  - Save and Test
 
 ### 9. Configure Jellyfin - http://raspi.local:8096
 - Complete initial setup wizard
@@ -179,9 +199,3 @@ docker-compose up -d
 - RDTClient (TorBox): http://raspi.local:6501
 - qBittorrent: http://raspi.local:8080
 - Homarr: http://raspi.local:5000
-
-## Notes
-- RDTClient mimics qBittorrent API, so configure it as qBittorrent in Sonarr/Radarr
-- Warp SOCKS proxy available at raspi.local:1080 if needed for indexers
-- Update PUID/PGID in docker-compose.yaml if not 1000
-- Update timezone from Europe/Madrid if needed
