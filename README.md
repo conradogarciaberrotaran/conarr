@@ -4,7 +4,11 @@
 - Docker and Docker Compose installed
 - Real-Debrid account with API key
 - TorBox account with API key
-- ~/media/downloads, ~/media/shows, ~/media/movies directories created
+- Create media directories with correct permissions:
+  ```bash
+  mkdir -p ~/media/{downloads,shows,movies}
+  sudo chown -R $USER:$USER ~/media
+  ```
 
 ## Initial Setup
 
@@ -14,7 +18,8 @@ docker-compose up -d
 ```
 
 ### 2. Configure RDTClient (Real-Debrid) - http://raspi.local:6500
-- Login with default credentials (check first run logs if needed)
+- Login with default credentials: Username: `admin`, Password: `admin`
+- **Change password immediately**: Settings → Authentication → Change password (note this down for Sonarr/Radarr)
 - Settings → Provider: Select "RealDebrid"
 - Enter your Real-Debrid API key
 - Download Path: `/data/downloads`
@@ -22,7 +27,8 @@ docker-compose up -d
 - Save settings
 
 ### 3. Configure RDTClient (TorBox) - http://raspi.local:6501
-- Login with default credentials
+- Login with default credentials: Username: `admin`, Password: `admin`
+- **Change password immediately**: Settings → Authentication → Change password (note this down for Sonarr/Radarr)
 - Settings → Provider: Select "TorBox"
 - Enter your TorBox API key
 - Download Path: `/data/downloads`
@@ -60,45 +66,51 @@ docker-compose up -d
 - Settings → Media Management
   - Root Folder: Add `/tv`
   - Enable "Rename Episodes"
-  - **Completed Download Handling**: Enable (should be on by default)
   - File Management: Enable "Unmonitor Deleted Episodes" (optional)
-- Settings → Download Clients → Add Download Client
-  - **RDTClient (Real-Debrid)**:
-    - Type: "qBittorrent"
-    - Host: `rdtclient-rd`
-    - Port: `6500`
-    - Category: `sonarr` (optional but recommended)
-    - Priority: `1` (1 = highest)
+- Settings → Download Clients
+  - **Completed Download Handling**: Enable (should be on by default at top of page)
+  - Add Download Client
   - **RDTClient (TorBox)**:
     - Type: "qBittorrent"
     - Host: `rdtclient-torbox`
     - Port: `6500`
+    - Username: `admin` (or the username you set)
+    - Password: (the password you set in step 3)
+    - Category: `sonarr`
+    - Priority: `1` (1 = highest)
+  - **RDTClient (Real-Debrid)**:
+    - Type: "qBittorrent"
+    - Host: `rdtclient-rd`
+    - Port: `6500`
+    - Username: `admin` (or the username you set)
+    - Password: (the password you set in step 2)
     - Category: `sonarr`
     - Priority: `2`
-- Settings → Download Clients → Remote Path Mappings
-  - Not needed (all containers use `/downloads`)
 
 ### 7. Configure Radarr Download Clients - http://raspi.local:7878
 - Settings → Media Management
   - Root Folder: Add `/movies`
   - Enable "Rename Movies"
-  - **Completed Download Handling**: Enable (should be on by default)
   - File Management: Enable "Unmonitor Deleted Movies" (optional)
-- Settings → Download Clients → Add Download Client
-  - **RDTClient (Real-Debrid)**:
-    - Type: "qBittorrent"
-    - Host: `rdtclient-rd`
-    - Port: `6500`
-    - Category: `radarr` (optional but recommended)
-    - Priority: `1` (1 = highest)
+- Settings → Download Clients
+  - **Completed Download Handling**: Enable (should be on by default at top of page)
+  - Add Download Client
   - **RDTClient (TorBox)**:
     - Type: "qBittorrent"
     - Host: `rdtclient-torbox`
     - Port: `6500`
+    - Username: `admin` (or the username you set)
+    - Password: (the password you set in step 3)
+    - Category: `radarr`
+    - Priority: `1` (1 = highest)
+  - **RDTClient (Real-Debrid)**:
+    - Type: "qBittorrent"
+    - Host: `rdtclient-rd`
+    - Port: `6500`
+    - Username: `admin` (or the username you set)
+    - Password: (the password you set in step 2)
     - Category: `radarr`
     - Priority: `2`
-- Settings → Download Clients → Remote Path Mappings
-  - Not needed (all containers use `/downloads`)
 
 ### 8. Configure Bazarr - http://raspi.local:6767
 - Settings → Sonarr
@@ -124,18 +136,19 @@ docker-compose up -d
 
 1. **Search**: Add content in Sonarr (TV) or Radarr (Movies)
 2. **Find**: Prowlarr searches configured indexers and returns results
-3. **Send**: Sonarr/Radarr sends torrent to RDTClient (Real-Debrid or TorBox based on priority)
+3. **Send**: Sonarr/Radarr sends torrent to RDTClient (TorBox first, then Real-Debrid based on priority)
 4. **Cloud Download**: RDTClient adds torrent to debrid service (downloads on their servers, not yours)
-5. **Local Download**: RDTClient downloads completed files from debrid service to `~/media/downloads`
+5. **Local Download**: RDTClient downloads completed files from debrid service to `/data/downloads` (host: `~/media/downloads`)
 6. **Import**: Sonarr/Radarr automatically:
-   - Detects completed download
+   - Detects completed download in `/data/downloads`
    - Renames file according to naming scheme
-   - Moves/hardlinks file to `~/media/shows` or `~/media/movies`
-   - Removes from `~/media/downloads`
+   - Moves/hardlinks file to `/tv` or `/movies` (host: `~/media/shows` or `~/media/movies`)
+   - Removes from `/data/downloads`
 7. **Subtitles**: Bazarr automatically downloads subtitles for imported content
 8. **Watch**: Content appears in Jellyfin
 
 **Note**: Steps 5-7 happen automatically via Completed Download Handling. No manual file moving required.
+**Note**: All containers use `/data/downloads` internally for consistency (no remote path mappings needed).
 
 ## Service URLs
 - Sonarr: http://raspi.local:8989
