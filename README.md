@@ -4,11 +4,61 @@
 - Docker and Docker Compose installed
 - Real-Debrid account with API key
 - TorBox account with API key
-- Create media directories with correct permissions:
-  ```bash
-  mkdir -p ~/media/{downloads,shows,movies}
-  sudo chown -R $USER:$USER ~/media
-  ```
+- External SSD/HDD for media storage (strongly recommended)
+
+## Storage Setup
+
+### Option 1: External Drive (Recommended)
+
+**Why?** Running on SD card causes overheating, slow performance, and SD card wear.
+
+1. **Connect your external drive** (SSD recommended, like Crucial X9)
+
+2. **Find the drive's UUID:**
+   ```bash
+   sudo blkid
+   ```
+   Look for your drive (e.g., `LABEL="Crucial X9"`) and note the `UUID`
+
+3. **Create mount point:**
+   ```bash
+   sudo mkdir -p /media/storage
+   sudo chown $USER:$USER /media/storage
+   ```
+
+4. **Get your UID and GID:**
+   ```bash
+   id -u  # Should be 1000
+   id -g  # Should be 1000
+   ```
+
+5. **Add to `/etc/fstab` for auto-mount on boot:**
+   ```bash
+   echo "UUID=YOUR_UUID /media/storage exfat defaults,uid=1000,gid=1000,umask=0022 0 0" | sudo tee -a /etc/fstab
+   ```
+   Replace `YOUR_UUID` with the UUID from step 2. Change `exfat` to `ext4` or `ntfs-3g` if needed.
+
+6. **Mount the drive:**
+   ```bash
+   sudo mount -a
+   df -h | grep storage  # Verify it's mounted
+   ```
+
+7. **Create media directories:**
+   ```bash
+   mkdir -p /media/storage/media/{downloads,shows,movies}
+   ```
+
+### Option 2: SD Card (Not Recommended)
+
+Only use if you don't have an external drive. Performance will be poor and SD card will wear out quickly.
+
+```bash
+mkdir -p ~/media/{downloads,shows,movies}
+sudo chown -R $USER:$USER ~/media
+```
+
+Then update all paths in `docker-compose.yaml` from `/media/storage/media/` to `~/media/`
 
 ## Initial Setup
 
@@ -177,17 +227,17 @@ docker-compose up -d
 2. **Find**: Prowlarr searches configured indexers and returns results
 3. **Send**: Sonarr/Radarr sends torrent to RDTClient (TorBox first, then Real-Debrid based on priority)
 4. **Cloud Download**: RDTClient adds torrent to debrid service (downloads on their servers, not yours)
-5. **Local Download**: RDTClient downloads completed files from debrid service to `/data/downloads` (host: `~/media/downloads`)
+5. **Local Download**: RDTClient downloads completed files from debrid service to `/data/downloads` (host: `/media/storage/media/downloads`)
 6. **Import**: Sonarr/Radarr automatically:
    - Detects completed download in `/data/downloads`
    - Renames file according to naming scheme
-   - Moves/hardlinks file to `/tv` or `/movies` (host: `~/media/shows` or `~/media/movies`)
+   - Moves/hardlinks file to `/tv` or `/movies` (host: `/media/storage/media/shows` or `/media/storage/media/movies`)
    - Removes from `/data/downloads`
 7. **Subtitles**: Bazarr automatically downloads subtitles for imported content
 8. **Watch**: Content appears in Jellyfin
 
 **Note**: Steps 5-7 happen automatically via Completed Download Handling. No manual file moving required.
-**Note**: All containers use `/data/downloads` internally for consistency (no remote path mappings needed).
+**Note**: All containers use `/data/downloads` internally for consistency. External drive mounted at `/media/storage/` for fast, reliable storage.
 
 ## Service URLs
 - Sonarr: http://raspi.local:8989

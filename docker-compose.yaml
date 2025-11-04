@@ -26,7 +26,7 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./rdtclient-rd/data:/data/db
-      - /media/cono/Crucial X9/media/downloads:/data/downloads
+      - /media/storage/media/downloads:/data/downloads
     ports:
       - "6500:6500"
     networks:
@@ -48,7 +48,7 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./rdtclient-torbox/data:/data/db
-      - /media/cono/Crucial X9/media/downloads:/data/downloads
+      - /media/storage/media/downloads:/data/downloads
     ports:
       - "6501:6500"
     networks:
@@ -83,8 +83,8 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./sonarr:/config
-      - /media/cono/Crucial X9/media/shows:/tv
-      - /media/cono/Crucial X9/media/downloads:/data/downloads
+      - /media/storage/media/shows:/tv
+      - /media/storage/media/downloads:/data/downloads
     ports:
       - "8989:8989"
     networks:
@@ -113,8 +113,8 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./radarr:/config
-      - /media/cono/Crucial X9/media/movies:/movies
-      - /media/cono/Crucial X9/media/downloads:/data/downloads
+      - /media/storage/media/movies:/movies
+      - /media/storage/media/downloads:/data/downloads
     ports:
       - "7878:7878"
     networks:
@@ -171,7 +171,7 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - ./qbittorrent:/config
-      - /media/cono/Crucial X9/media/downloads:/data/downloads
+      - /media/storage/media/downloads:/data/downloads
     ports:
       - "8080:8080"
     networks:
@@ -199,8 +199,8 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./bazarr:/config
-      - /media/cono/Crucial X9/media/shows:/tv
-      - /media/cono/Crucial X9/media/movies:/movies
+      - /media/storage/media/shows:/tv
+      - /media/storage/media/movies:/movies
     ports:
       - "6767:6767"
     networks:
@@ -222,8 +222,8 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./jellyfin:/config
-      - /media/cono/Crucial X9/media/shows:/data/tvshows
-      - /media/cono/Crucial X9/media/movies:/data/movies
+      - /media/storage/media/shows:/data/tvshows
+      - /media/storage/media/movies:/data/movies
     ports:
       - "8096:8096"
     networks:
