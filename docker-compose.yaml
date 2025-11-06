@@ -1,22 +1,4 @@
 services:
-  warp:
-    image: monius/docker-warp-socks:latest
-    container_name: warp
-    restart: unless-stopped
-    ports:
-      - "1080:9091"
-    environment:
-      - TZ=Europe/Madrid
-    cap_add:
-      - NET_ADMIN
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=0
-      - net.ipv4.conf.all.src_valid_mark=1
-    volumes:
-      - ./warp-data:/root/.warp
-    networks:
-      - media_net
-
   rdtclient-realdebrid:
     image: rogerfar/rdtclient:latest
     container_name: rdtclient-rd
