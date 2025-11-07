@@ -14,6 +14,8 @@ services:
     networks:
       - media_net
     restart: unless-stopped
+    mem_limit: 384m
+    mem_reservation: 192m
     labels:
       - homepage.group=Download Clients
       - homepage.name=Real-Debrid
@@ -36,6 +38,8 @@ services:
     networks:
       - media_net
     restart: unless-stopped
+    mem_limit: 384m
+    mem_reservation: 192m
     labels:
       - homepage.group=Download Clients
       - homepage.name=TorBox
@@ -74,6 +78,8 @@ services:
       - rdtclient-realdebrid
       - rdtclient-torbox
     restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 256m
     labels:
       - homepage.group=Media Management
       - homepage.name=Sonarr
@@ -102,6 +108,8 @@ services:
       - rdtclient-realdebrid
       - rdtclient-torbox
     restart: unless-stopped
+    mem_limit: 512m
+    mem_reservation: 256m
     labels:
       - homepage.group=Media Management
       - homepage.name=Radarr
@@ -128,6 +136,8 @@ services:
     depends_on:
       - flaresolverr
     restart: unless-stopped
+    mem_limit: 256m
+    mem_reservation: 128m
     labels:
       - homepage.group=Media Management
       - homepage.name=Prowlarr
@@ -180,6 +190,8 @@ services:
     networks:
       - media_net
     restart: unless-stopped
+    mem_limit: 256m
+    mem_reservation: 128m
     labels:
       - homepage.group=Media Management
       - homepage.name=Bazarr
@@ -202,6 +214,8 @@ services:
     networks:
       - media_net
     restart: unless-stopped
+    mem_limit: 768m
+    mem_reservation: 384m
     labels:
       - homepage.group=Media Servers
       - homepage.name=Jellyfin
@@ -223,6 +237,8 @@ services:
       - TZ=Europe/Madrid
     networks:
       - media_net
+    mem_limit: 256m
+    mem_reservation: 128m
 
 networks:
   media_net:
