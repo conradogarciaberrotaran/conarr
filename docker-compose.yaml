@@ -71,7 +71,6 @@ services:
     networks:
       - media_net
     depends_on:
-      - warp
       - rdtclient-realdebrid
       - rdtclient-torbox
     restart: unless-stopped
@@ -100,7 +99,6 @@ services:
     networks:
       - media_net
     depends_on:
-      - warp
       - rdtclient-realdebrid
       - rdtclient-torbox
     restart: unless-stopped
@@ -128,7 +126,6 @@ services:
     networks:
       - media_net
     depends_on:
-      - warp
       - flaresolverr
     restart: unless-stopped
     labels:
@@ -156,8 +153,6 @@ services:
       - "8080:8080"
     networks:
       - media_net
-    depends_on:
-      - warp
     restart: unless-stopped
     labels:
       - homepage.group=Download Clients
