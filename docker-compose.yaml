@@ -65,8 +65,7 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./sonarr:/config
-      - /media/storage/media/shows:/tv
-      - /media/storage/media/downloads:/data/downloads
+      - /media/storage/media:/data
     ports:
       - "8989:8989"
     networks:
@@ -95,8 +94,7 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./radarr:/config
-      - /media/storage/media/movies:/movies
-      - /media/storage/media/downloads:/data/downloads
+      - /media/storage/media:/data
     ports:
       - "7878:7878"
     networks:
@@ -181,8 +179,7 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./bazarr:/config
-      - /media/storage/media/shows:/tv
-      - /media/storage/media/movies:/movies
+      - /media/storage/media:/data
     ports:
       - "6767:6767"
     networks:
@@ -204,8 +201,7 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - ./jellyfin:/config
-      - /media/storage/media/shows:/data/tvshows
-      - /media/storage/media/movies:/data/movies
+      - /media/storage/media:/data
     ports:
       - "8096:8096"
     networks:
