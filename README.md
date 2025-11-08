@@ -60,6 +60,27 @@ sudo chown -R $USER:$USER ~/media
 
 Then update all paths in `docker-compose.yaml` from `/media/storage/media/` to `~/media/`
 
+## Important: File Structure for Hardlinks
+
+This setup follows [TRaSH Guides](https://trash-guides.info/File-and-Folder-Structure/How-to-set-up/Docker/) recommendations for optimal performance:
+
+**Key Principle:** All containers mount `/media/storage/media` as `/data` internally. This enables:
+- ✅ **Instant imports** via hardlinks (no file copying)
+- ✅ **Atomic moves** (instant file relocation)
+- ✅ **Disk space savings** (same file in multiple locations uses space only once)
+
+**Structure:**
+```
+/media/storage/media/
+  ├── downloads/     (Download clients write here)
+  ├── shows/         (Sonarr imports here)
+  └── movies/        (Radarr imports here)
+```
+
+**Why this works:** When Sonarr/Radarr import from `/data/downloads` to `/data/shows` or `/data/movies`, Docker sees them on the same `/data` mount, allowing instant hardlinks instead of slow copying.
+
+**Memory Limits:** Each container has memory limits to prevent any single container from overwhelming the Pi's 4GB RAM and causing system freezes.
+
 ## Initial Setup
 
 ### 1. Start Services
@@ -129,7 +150,7 @@ docker-compose up -d
   - Verify **Enable RSS** and **Enable Automatic Search** are checked
   - If not synced, go back to Prowlarr and click **Sync App Indexers**
 - Settings → Media Management
-  - Root Folder: Add `/tv`
+  - Root Folder: Add `/data/shows` (NOT `/tv` - important for hardlinks!)
   - Enable "Rename Episodes"
   - File Management: Enable "Unmonitor Deleted Episodes" (optional)
 - Settings → Download Clients
@@ -158,7 +179,7 @@ docker-compose up -d
   - Verify **Enable RSS** and **Enable Automatic Search** are checked
   - If not synced, go back to Prowlarr and click **Sync App Indexers**
 - Settings → Media Management
-  - Root Folder: Add `/movies`
+  - Root Folder: Add `/data/movies` (NOT `/movies` - important for hardlinks!)
   - Enable "Rename Movies"
   - File Management: Enable "Unmonitor Deleted Movies" (optional)
 - Settings → Download Clients
@@ -215,7 +236,7 @@ docker-compose up -d
 ### 9. Configure Jellyfin - http://raspi.local:8096
 - Complete initial setup wizard
 - Add Media Libraries:
-  - Shows: `/data/tvshows`
+  - Shows: `/data/shows`
   - Movies: `/data/movies`
 
 ### 10. Configure Homarr - http://raspi.local:5000
@@ -230,14 +251,15 @@ docker-compose up -d
 5. **Local Download**: RDTClient downloads completed files from debrid service to `/data/downloads` (host: `/media/storage/media/downloads`)
 6. **Import**: Sonarr/Radarr automatically:
    - Detects completed download in `/data/downloads`
+   - **Creates hardlink** (instant, no copying!) to `/data/shows` or `/data/movies`
    - Renames file according to naming scheme
-   - Moves/hardlinks file to `/tv` or `/movies` (host: `/media/storage/media/shows` or `/media/storage/media/movies`)
-   - Removes from `/data/downloads`
+   - Removes original from `/data/downloads`
 7. **Subtitles**: Bazarr automatically downloads subtitles for imported content
 8. **Watch**: Content appears in Jellyfin
 
 **Note**: Steps 5-7 happen automatically via Completed Download Handling. No manual file moving required.
-**Note**: All containers use `/data/downloads` internally for consistency. External drive mounted at `/media/storage/` for fast, reliable storage.
+**Note**: Hardlinks are instant and use no extra disk space - the same file appears in both locations!
+**Note**: All containers mount `/media/storage/media` as `/data` for atomic moves and hardlinks (following [TRaSH Guides](https://trash-guides.info/)).
 
 ## Service URLs
 - Sonarr: http://raspi.local:8989
@@ -249,3 +271,41 @@ docker-compose up -d
 - RDTClient (TorBox): http://raspi.local:6501
 - qBittorrent: http://raspi.local:8080
 - Homarr: http://raspi.local:5000
+
+## Notes
+- RDTClient mimics qBittorrent API, so configure it as qBittorrent in Sonarr/Radarr
+- Update PUID/PGID in docker-compose.yaml if not 1000
+- Update timezone from Europe/Madrid if needed
+- All containers have memory limits to prevent system freezes on Pi 4 with 4GB RAM
+
+## Memory Limits (Raspberry Pi 4GB)
+
+Each container has memory limits to prevent overwhelming the system:
+- **Sonarr/Radarr**: 512MB max (256MB reserved)
+- **Jellyfin**: 768MB max (384MB reserved)
+- **RDTClient (both)**: 384MB max (192MB reserved)
+- **Prowlarr/Bazarr/Homarr**: 256MB max (128MB reserved)
+
+**Total**: ~3.3GB max, leaving headroom for system operations.
+
+## Performance Tips (Raspberry Pi 4GB)
+
+### Normal Behavior:
+- System may slow down during active downloads/imports (this is expected)
+- Let operations complete before starting new ones
+- One show/movie at a time recommended
+
+### If System Freezes:
+1. **Check memory usage**: `ssh cono@raspi.local "free -h"`
+2. **Check container stats**: `ssh cono@raspi.local "docker stats --no-stream"`
+3. **Restart problematic container**: `ssh cono@raspi.local "docker restart <container>"`
+
+### Optimization:
+- **Limit RDTClient downloads**: Settings → Max Downloads (1-2 concurrent)
+- **Monitor temperature**: `vcgencmd measure_temp` (add cooling if >70°C)
+- **Consider upgrading**: Raspberry Pi 5 8GB (~$95) provides 2-3x better performance
+
+### Hardware Recommendations:
+- ✅ **Current setup works** but is at the limit with 4GB RAM
+- ✅ **Raspberry Pi 5 8GB** - Best upgrade for this workload
+- ✅ **Mini PC with N100 CPU** (~$150) - Even more powerful alternative
