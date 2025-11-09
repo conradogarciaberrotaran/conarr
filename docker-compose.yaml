@@ -22,7 +22,6 @@ services:
       - "6767:6767"  # Bazarr UI
       - "8096:8096"  # Jellyfin UI
       - "6500:6500"  # RDTClient Real-Debrid
-      - "6501:6501"  # RDTClient TorBox
     networks:
       - media_net
     restart: unless-stopped
@@ -57,13 +56,13 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
-      - RDTCLIENT_PORT=6501
     volumes:
       - ./rdtclient-torbox/data:/data/db
       - /media/storage/media/downloads:/data/downloads
-    network_mode: "service:gluetun"
-    depends_on:
-      - gluetun
+    ports:
+      - "6501:6500"
+    networks:
+      - media_net
     restart: unless-stopped
     mem_limit: 384m
     labels:
