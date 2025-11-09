@@ -1,12 +1,27 @@
 services:
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: cloudflared
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${MULLVAD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${MULLVAD_ADDRESSES}
+      - SERVER_CITIES=${MULLVAD_SERVER_CITY}
+      - HTTPPROXY=on
+      - SHADOWSOCKS=on
+      - TZ=Europe/Madrid
+    ports:
+      - "8888:8888"  # HTTP proxy
+      - "8388:8388"  # Shadowsocks
     networks:
       - media_net
     restart: unless-stopped
-    mem_limit: 128m
+    mem_limit: 256m
 
   rdtclient-realdebrid:
     image: rogerfar/rdtclient:latest
@@ -133,6 +148,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
+      - HTTP_PROXY=http://gluetun:8888
+      - HTTPS_PROXY=http://gluetun:8888
     volumes:
       - ./prowlarr:/config
     ports:
@@ -140,7 +157,7 @@ services:
     networks:
       - media_net
     depends_on:
-      - cloudflared
+      - gluetun
       - flaresolverr
     restart: unless-stopped
     mem_limit: 256m
