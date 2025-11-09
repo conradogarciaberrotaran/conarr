@@ -88,7 +88,7 @@ This setup follows [TRaSH Guides](https://trash-guides.info/File-and-Folder-Stru
 docker-compose up -d
 ```
 
-### 2. Configure RDTClient (Real-Debrid) - http://raspi.local:6500
+### 2. Configure RDTClient (Real-Debrid) - http://raspberrypi.local:6500
 - Login with default credentials: Username: `admin`, Password: `admin`
 - **Change password immediately**: Settings → Authentication → Change password (note this down for Sonarr/Radarr)
 - Settings → Provider: Select "RealDebrid"
@@ -97,7 +97,7 @@ docker-compose up -d
 - Mapped Path: Leave empty
 - Save settings
 
-### 3. Configure RDTClient (TorBox) - http://raspi.local:6501
+### 3. Configure RDTClient (TorBox) - http://raspberrypi.local:6501
 - Login with default credentials: Username: `admin`, Password: `admin`
 - **Change password immediately**: Settings → Authentication → Change password (note this down for Sonarr/Radarr)
 - Settings → Provider: Select "TorBox"
@@ -108,15 +108,15 @@ docker-compose up -d
 
 ### 4. Initial Setup Sonarr and Radarr (Get API Keys)
 
-#### Sonarr - http://raspi.local:8989
+#### Sonarr - http://raspberrypi.local:8989
 - Complete initial setup wizard
 - Settings → General → Security → Copy the **API Key** (you'll need this for Prowlarr)
 
-#### Radarr - http://raspi.local:7878
+#### Radarr - http://raspberrypi.local:7878
 - Complete initial setup wizard
 - Settings → General → Security → Copy the **API Key** (you'll need this for Prowlarr)
 
-### 5. Configure Prowlarr - http://raspi.local:9696
+### 5. Configure Prowlarr - http://raspberrypi.local:9696
 - Complete initial setup wizard
 - **Configure FlareSolverr proxy first** (for Cloudflare-protected indexers):
   - Settings → Indexers → Add Proxy
@@ -144,7 +144,7 @@ docker-compose up -d
   - Click **Sync App Indexers** button to sync all indexers to both apps
   - Prowlarr will auto-sync indexers (with RSS enabled) to both apps
 
-### 6. Configure Sonarr Download Clients - http://raspi.local:8989
+### 6. Configure Sonarr Download Clients - http://raspberrypi.local:8989
 - **Verify Indexers**: Settings → Indexers
   - Check that indexers from Prowlarr are listed
   - Verify **Enable RSS** and **Enable Automatic Search** are checked
@@ -173,7 +173,7 @@ docker-compose up -d
     - Category: `sonarr`
     - Priority: `2`
 
-### 7. Configure Radarr Download Clients - http://raspi.local:7878
+### 7. Configure Radarr Download Clients - http://raspberrypi.local:7878
 - **Verify Indexers**: Settings → Indexers
   - Check that indexers from Prowlarr are listed
   - Verify **Enable RSS** and **Enable Automatic Search** are checked
@@ -202,7 +202,7 @@ docker-compose up -d
     - Category: `radarr`
     - Priority: `2`
 
-### 8. Configure Bazarr - http://raspi.local:6767
+### 8. Configure Bazarr - http://raspberrypi.local:6767
 - **Settings → Providers**:
   - Add subtitle providers (click the + button for each):
     - SubDivx (for Spanish)
@@ -233,13 +233,13 @@ docker-compose up -d
   - Default Language Profile: Select the profile you created above
   - Save and Test
 
-### 9. Configure Jellyfin - http://raspi.local:8096
+### 9. Configure Jellyfin - http://raspberrypi.local:8096
 - Complete initial setup wizard
 - Add Media Libraries:
   - Shows: `/data/shows`
   - Movies: `/data/movies`
 
-### 10. Configure Homarr - http://raspi.local:5000
+### 10. Configure Homarr - http://raspberrypi.local:5000
 - Add widgets for all services using the URLs and API keys configured above
 
 ## Download Workflow
@@ -262,15 +262,15 @@ docker-compose up -d
 **Note**: All containers mount `/media/storage/media` as `/data` for atomic moves and hardlinks (following [TRaSH Guides](https://trash-guides.info/)).
 
 ## Service URLs
-- Sonarr: http://raspi.local:8989
-- Radarr: http://raspi.local:7878
-- Prowlarr: http://raspi.local:9696
-- Bazarr: http://raspi.local:6767
-- Jellyfin: http://raspi.local:8096
-- RDTClient (Real-Debrid): http://raspi.local:6500
-- RDTClient (TorBox): http://raspi.local:6501
-- qBittorrent: http://raspi.local:8080
-- Homarr: http://raspi.local:5000
+- Sonarr: http://raspberrypi.local:8989
+- Radarr: http://raspberrypi.local:7878
+- Prowlarr: http://raspberrypi.local:9696
+- Bazarr: http://raspberrypi.local:6767
+- Jellyfin: http://raspberrypi.local:8096
+- RDTClient (Real-Debrid): http://raspberrypi.local:6500
+- RDTClient (TorBox): http://raspberrypi.local:6501
+- qBittorrent: http://raspberrypi.local:8080
+- Homarr: http://raspberrypi.local:5000
 
 ## Notes
 - RDTClient mimics qBittorrent API, so configure it as qBittorrent in Sonarr/Radarr
@@ -296,9 +296,9 @@ Each container has memory limits to prevent overwhelming the system:
 - One show/movie at a time recommended
 
 ### If System Freezes:
-1. **Check memory usage**: `ssh cono@raspi.local "free -h"`
-2. **Check container stats**: `ssh cono@raspi.local "docker stats --no-stream"`
-3. **Restart problematic container**: `ssh cono@raspi.local "docker restart <container>"`
+1. **Check memory usage**: `ssh cono@raspberrypi.local "free -h"`
+2. **Check container stats**: `ssh cono@raspberrypi.local "docker stats --no-stream"`
+3. **Restart problematic container**: `ssh cono@raspberrypi.local "docker restart <container>"`
 
 ### Optimization:
 - **Limit RDTClient downloads**: Settings → Max Downloads (1-2 concurrent)

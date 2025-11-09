@@ -43,7 +43,7 @@ services:
       - homepage.group=Download Clients
       - homepage.name=Real-Debrid
       - homepage.icon=real-debrid.png
-      - homepage.href=http://raspi.local:6500
+      - homepage.href=http://raspberrypi.local:6500
       - homepage.description=Real-Debrid Client
 
   rdtclient-torbox:
@@ -66,7 +66,7 @@ services:
       - homepage.group=Download Clients
       - homepage.name=TorBox
       - homepage.icon=torbox.png
-      - homepage.href=http://raspi.local:6501
+      - homepage.href=http://raspberrypi.local:6501
       - homepage.description=TorBox Client
 
   flaresolverr:
@@ -103,7 +103,7 @@ services:
       - homepage.group=Media Management
       - homepage.name=Sonarr
       - homepage.icon=sonarr.png
-      - homepage.href=http://raspi.local:8989
+      - homepage.href=http://raspberrypi.local:8989
       - homepage.description=TV Shows
       - homepage.widget.type=sonarr
       - homepage.widget.url=http://sonarr:8989
@@ -130,7 +130,7 @@ services:
       - homepage.group=Media Management
       - homepage.name=Radarr
       - homepage.icon=radarr.png
-      - homepage.href=http://raspi.local:7878
+      - homepage.href=http://raspberrypi.local:7878
       - homepage.description=Movies
       - homepage.widget.type=radarr
       - homepage.widget.url=http://radarr:7878
@@ -155,7 +155,7 @@ services:
       - homepage.group=Media Management
       - homepage.name=Prowlarr
       - homepage.icon=prowlarr.png
-      - homepage.href=http://raspi.local:9696
+      - homepage.href=http://raspberrypi.local:9696
       - homepage.description=Indexer Manager
       - homepage.widget.type=prowlarr
       - homepage.widget.url=http://prowlarr:9696
@@ -181,7 +181,7 @@ services:
       - homepage.group=Download Clients
       - homepage.name=qBittorrent
       - homepage.icon=qbittorrent.png
-      - homepage.href=http://raspi.local:8080
+      - homepage.href=http://raspberrypi.local:8080
       - homepage.description=Torrent Client
       - homepage.widget.type=qbittorrent
       - homepage.widget.url=http://qbittorrent:8080
@@ -208,7 +208,7 @@ services:
       - homepage.group=Media Management
       - homepage.name=Bazarr
       - homepage.icon=bazarr.png
-      - homepage.href=http://raspi.local:6767
+      - homepage.href=http://raspberrypi.local:6767
       - homepage.description=Subtitles
 
   jellyfin:
@@ -231,7 +231,7 @@ services:
       - homepage.group=Media Servers
       - homepage.name=Jellyfin
       - homepage.icon=jellyfin.png
-      - homepage.href=http://raspi.local:8096
+      - homepage.href=http://raspberrypi.local:8096
       - homepage.description=Media Server
   homarr:
     image: ghcr.io/ajnart/homarr:latest
