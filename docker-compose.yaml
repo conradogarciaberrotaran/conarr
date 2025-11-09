@@ -54,10 +54,10 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
-      - ASPNETCORE_URLS=http://*:6501
     volumes:
       - ./rdtclient-torbox/data:/data/db
       - /media/storage/media/downloads:/data/downloads
+      - ./rdtclient-torbox/appsettings.json:/app/appsettings.json
     network_mode: "service:gluetun"
     depends_on:
       - gluetun
