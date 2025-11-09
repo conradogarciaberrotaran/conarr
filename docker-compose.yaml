@@ -15,6 +15,7 @@ services:
       - TZ=Europe/Madrid
     ports:
       - "9696:9696"  # Prowlarr UI
+      - "8191:8191"  # FlareSolverr
     networks:
       - media_net
     restart: unless-stopped
@@ -74,10 +75,9 @@ services:
       - TZ=Europe/Madrid
       - CAPTCHA_SOLVER=none
       - TIMEOUT=120000
-    ports:
-      - "8191:8191"
-    networks:
-      - media_net
+    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
     restart: unless-stopped
 
   sonarr:
