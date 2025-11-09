@@ -82,6 +82,7 @@ docker compose up -d
 
 ### Jellyfin - http://raspberrypi.local:8096
 - Add libraries: `/data/shows` and `/data/movies`
+- **Samsung TV app**: Use https://github.com/PatrickSt1991/Samsung-Jellyfin-Installer for one-click installation
 
 ## How It Works
 
