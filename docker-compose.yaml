@@ -12,12 +12,9 @@ services:
       - WIREGUARD_PRIVATE_KEY=${MULLVAD_PRIVATE_KEY}
       - WIREGUARD_ADDRESSES=${MULLVAD_ADDRESSES}
       - SERVER_CITIES=${MULLVAD_SERVER_CITY}
-      - HTTPPROXY=on
-      - SHADOWSOCKS=on
       - TZ=Europe/Madrid
     ports:
-      - "8888:8888"  # HTTP proxy
-      - "8388:8388"  # Shadowsocks
+      - "9696:9696"  # Prowlarr UI
     networks:
       - media_net
     restart: unless-stopped
@@ -148,14 +145,9 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
-      - HTTP_PROXY=http://gluetun:8888
-      - HTTPS_PROXY=http://gluetun:8888
     volumes:
       - ./prowlarr:/config
-    ports:
-      - "9696:9696"
-    networks:
-      - media_net
+    network_mode: "service:gluetun"
     depends_on:
       - gluetun
       - flaresolverr
