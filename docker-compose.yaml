@@ -24,7 +24,6 @@ services:
     networks:
       - media_net
     restart: unless-stopped
-    mem_limit: 256m
 
   rdtclient-realdebrid:
     image: rogerfar/rdtclient:latest
@@ -40,7 +39,6 @@ services:
     depends_on:
       - gluetun
     restart: unless-stopped
-    mem_limit: 384m
     labels:
       - homepage.group=Download Clients
       - homepage.name=Real-Debrid
@@ -63,7 +61,6 @@ services:
     networks:
       - media_net
     restart: unless-stopped
-    mem_limit: 384m
     labels:
       - homepage.group=Download Clients
       - homepage.name=TorBox
@@ -100,7 +97,6 @@ services:
       - rdtclient-realdebrid
       - rdtclient-torbox
     restart: unless-stopped
-    mem_limit: 512m
     labels:
       - homepage.group=Media Management
       - homepage.name=Sonarr
@@ -127,7 +123,6 @@ services:
       - rdtclient-realdebrid
       - rdtclient-torbox
     restart: unless-stopped
-    mem_limit: 512m
     labels:
       - homepage.group=Media Management
       - homepage.name=Radarr
@@ -152,7 +147,6 @@ services:
       - gluetun
       - flaresolverr
     restart: unless-stopped
-    mem_limit: 256m
     labels:
       - homepage.group=Media Management
       - homepage.name=Prowlarr
@@ -177,7 +171,6 @@ services:
     depends_on:
       - gluetun
     restart: unless-stopped
-    mem_limit: 256m
     labels:
       - homepage.group=Media Management
       - homepage.name=Bazarr
@@ -199,7 +192,6 @@ services:
     depends_on:
       - gluetun
     restart: unless-stopped
-    mem_limit: 768m
     labels:
       - homepage.group=Media Servers
       - homepage.name=Jellyfin
@@ -221,7 +213,6 @@ services:
       - TZ=Europe/Madrid
     networks:
       - media_net
-    mem_limit: 256m
 
 networks:
   media_net:
