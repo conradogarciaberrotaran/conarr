@@ -158,15 +158,15 @@ docker-compose up -d
   - Add Download Client
   - **RDTClient (TorBox)**:
     - Type: "qBittorrent"
-    - Host: `rdtclient-torbox`
-    - Port: `6500`
+    - Host: `localhost`
+    - Port: `6501`
     - Username: `admin` (or the username you set)
     - Password: (the password you set in step 3)
     - Category: `sonarr`
     - Priority: `1` (1 = highest)
   - **RDTClient (Real-Debrid)**:
     - Type: "qBittorrent"
-    - Host: `rdtclient-rd`
+    - Host: `localhost`
     - Port: `6500`
     - Username: `admin` (or the username you set)
     - Password: (the password you set in step 2)
@@ -187,15 +187,15 @@ docker-compose up -d
   - Add Download Client
   - **RDTClient (TorBox)**:
     - Type: "qBittorrent"
-    - Host: `rdtclient-torbox`
-    - Port: `6500`
+    - Host: `localhost`
+    - Port: `6501`
     - Username: `admin` (or the username you set)
     - Password: (the password you set in step 3)
     - Category: `radarr`
     - Priority: `1` (1 = highest)
   - **RDTClient (Real-Debrid)**:
     - Type: "qBittorrent"
-    - Host: `rdtclient-rd`
+    - Host: `localhost`
     - Port: `6500`
     - Username: `admin` (or the username you set)
     - Password: (the password you set in step 2)
