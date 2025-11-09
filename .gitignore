@@ -1,0 +1,13 @@
+# Environment variables with secrets
+.env
+
+# Service data directories
+rdtclient-rd/
+rdtclient-torbox/
+sonarr/
+radarr/
+prowlarr/
+qbittorrent/
+bazarr/
+jellyfin/
+homarr/

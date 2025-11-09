@@ -1,4 +1,13 @@
 services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - media_net
+    restart: unless-stopped
+    mem_limit: 128m
+
   rdtclient-realdebrid:
     image: rogerfar/rdtclient:latest
     container_name: rdtclient-rd
@@ -128,12 +137,10 @@ services:
       - ./prowlarr:/config
     ports:
       - "9696:9696"
-    dns:
-      - 1.1.1.1
-      - 1.0.0.1
     networks:
       - media_net
     depends_on:
+      - cloudflared
       - flaresolverr
     restart: unless-stopped
     mem_limit: 256m
