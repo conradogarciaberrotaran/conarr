@@ -128,6 +128,9 @@ services:
       - ./prowlarr:/config
     ports:
       - "9696:9696"
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
     networks:
       - media_net
     depends_on:
