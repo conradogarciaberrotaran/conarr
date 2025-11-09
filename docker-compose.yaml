@@ -16,6 +16,8 @@ services:
     ports:
       - "9696:9696"  # Prowlarr UI
       - "8191:8191"  # FlareSolverr
+      - "8989:8989"  # Sonarr UI
+      - "7878:7878"  # Radarr UI
     networks:
       - media_net
     restart: unless-stopped
@@ -90,11 +92,9 @@ services:
     volumes:
       - ./sonarr:/config
       - /media/storage/media:/data
-    ports:
-      - "8989:8989"
-    networks:
-      - media_net
+    network_mode: "service:gluetun"
     depends_on:
+      - gluetun
       - rdtclient-realdebrid
       - rdtclient-torbox
     restart: unless-stopped
@@ -119,11 +119,9 @@ services:
     volumes:
       - ./radarr:/config
       - /media/storage/media:/data
-    ports:
-      - "7878:7878"
-    networks:
-      - media_net
+    network_mode: "service:gluetun"
     depends_on:
+      - gluetun
       - rdtclient-realdebrid
       - rdtclient-torbox
     restart: unless-stopped
