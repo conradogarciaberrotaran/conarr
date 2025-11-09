@@ -18,7 +18,6 @@ services:
       - "8191:8191"  # FlareSolverr
       - "8989:8989"  # Sonarr UI
       - "7878:7878"  # Radarr UI
-      - "8080:8080"  # qBittorrent UI
       - "6767:6767"  # Bazarr UI
       - "8096:8096"  # Jellyfin UI
       - "6500:6500"  # RDTClient Real-Debrid
@@ -163,32 +162,6 @@ services:
       - homepage.widget.type=prowlarr
       - homepage.widget.url=http://prowlarr:9696
       - homepage.widget.key=YOUR_PROWLARR_API_KEY
-
-  qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: qbittorrent
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Madrid
-      - WEBUI_PORT=8080
-    volumes:
-      - ./qbittorrent:/config
-      - /media/storage/media/downloads:/data/downloads
-    network_mode: "service:gluetun"
-    depends_on:
-      - gluetun
-    restart: unless-stopped
-    labels:
-      - homepage.group=Download Clients
-      - homepage.name=qBittorrent
-      - homepage.icon=qbittorrent.png
-      - homepage.href=http://raspberrypi.local:8080
-      - homepage.description=Torrent Client
-      - homepage.widget.type=qbittorrent
-      - homepage.widget.url=http://qbittorrent:8080
-      - homepage.widget.username=admin
-      - homepage.widget.password=YOUR_QBIT_PASSWORD
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
