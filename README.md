@@ -1,4 +1,4 @@
-# Media Server with VPN
+# Conarr Media Server
 
 ## Setup
 
