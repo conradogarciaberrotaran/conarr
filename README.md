@@ -87,6 +87,9 @@ docker compose up -d
    - Movies: `/data/movies`
 3. **Samsung TV app**: Use https://github.com/PatrickSt1991/Samsung-Jellyfin-Installer for one-click installation
 
+### Homarr - http://raspberrypi.local:5000
+See [HOMARR.md](HOMARR.md) for complete setup guide with integrations and widgets.
+
 ## How It Works
 
 1. **Search**: Add a show in Sonarr or movie in Radarr
