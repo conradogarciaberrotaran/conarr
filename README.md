@@ -107,9 +107,3 @@ docker compose up -d
 - RDTClient (Real-Debrid): http://raspberrypi.local:6500
 - RDTClient (TorBox): http://raspberrypi.local:6501
 - Homarr: http://raspberrypi.local:5000
-
-## Notes
-- All services route through Mullvad VPN and use `localhost` to communicate
-- Hardlinks work because everything mounts `/media/storage/media` as `/data`
-- RDTClient emulates qBittorrent API, so configure it as "qBittorrent" type
-- Update PUID/PGID (default: 1000) and timezone (default: Europe/Madrid) in `docker-compose.yaml` if needed
