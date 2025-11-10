@@ -77,6 +77,7 @@ docker compose up -d
 ### Bazarr - http://raspberrypi.local:6767
 - Settings → Providers: Add subtitle providers
 - Settings → Languages: Add languages and create profile
+- Settings → Languages → Default profile for newly added shows: Select "Default"
 - Settings → Sonarr: `localhost:8989` + API key
 - Settings → Radarr: `localhost:7878` + API key
 
